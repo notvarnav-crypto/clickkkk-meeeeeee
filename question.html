@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Important Question...</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<style>
+body {
+    text-align: center;
+    padding-top: 15vh;
+}
+
+#questionBox {
+    margin-top: 40px;
+}
+
+#noBtn {
+    position: relative;
+}
+
+#warningPopup {
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    color: red;
+    padding: 20px;
+    border: 3px solid red;
+    z-index: 1000;
+}
+
+#yesBtn:hover {
+    transform: scale(1.2);
+}
+</style>
+</head>
+
+<body class="fade-in">
+
+<h1 class="glow" id="personalGreeting"></h1>
+
+<div id="loveMeterContainer">
+    <div id="loveMeter"></div>
+</div>
+
+<div id="questionBox">
+    <h2>Will You Be My Valentine? 💖</h2>
+    <br><br>
+    <button class="pixel-btn" id="yesBtn" onclick="yesClicked()">YES 💗</button>
+    <button class="pixel-btn" id="noBtn">NO 💔</button>
+</div>
+
+<div id="warningPopup">
+    ⚠ SYSTEM ERROR ⚠<br>
+    Rejection Not Allowed 💘
+    <br><br>
+    <button class="pixel-btn" onclick="closeWarning()">Okay...</button>
+</div>
+
+<script src="script.js"></script>
+
+<script>
+const name = localStorage.getItem("valentineName") || "Beautiful";
+document.getElementById("personalGreeting").textContent =
+    name + ", I Need To Ask You Something... 💘";
+
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const warningPopup = document.getElementById("warningPopup");
+
+const noMessages = [
+    "Are You Sure? 😭",
+    "Think Again 💔",
+    "Wrong Answer 😤",
+    "System Warning ⚠",
+    "Try Again 💀"
+];
+
+let noHoverCount = 0;
+
+/* YES CLICK */
+function yesClicked() {
+    increaseLove(30);
+    confettiBurst();
+    setTimeout(() => {
+        window.location.href = "game.html";
+    }, 1000);
+}
+
+/* NO BUTTON CHAOS */
+noBtn.addEventListener("mouseover", () => {
+
+    // Move randomly
+    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+    noBtn.style.position = "absolute";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    // Shrink slightly
+    noBtn.style.transform = "scale(" + (1 - noHoverCount * 0.1) + ")";
+
+    // Change text
+    noBtn.textContent = noMessages[noHoverCount % noMessages.length];
+
+    // Shake screen
+    shakeScreen();
+
+    // Show fake warning sometimes
+    if (noHoverCount % 2 === 0) {
+        warningPopup.style.display = "block";
+    }
+
+    noHoverCount++;
+});
+
+/* Close Warning */
+function closeWarning() {
+    warningPopup.style.display = "none";
+}
+</script>
+
+</body>
+</html>
